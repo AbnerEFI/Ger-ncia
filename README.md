@@ -7,6 +7,7 @@
 ## - O código não contempla todos os eventos possíveis em um holerite, mas, contém os principais eventos, como, férias, horas extras, reembolsos, descontos...
 
 # Passo a Passo
-## Em pequenas empresas, a contabilidade é terceirizada, com isso o holerite dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
-## Para trabalhar com estes arquivos é necessário perceber a estrutura padrão do PDF. Neste projeto trabalhei com a biblioteca pdfplumber e com o seguinte padrão:
+## 1- Analisando o PDF
+### Em pequenas empresas, a contabilidade é terceirizada, com isso o holerite dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
+### Para trabalhar com estes arquivos é necessário perceber a estrutura padrão do PDF. Neste projeto trabalhei com a biblioteca pdfplumber e com o seguinte padrão:
 ![HOLERITE MODELO](https://github.com/AbnerEFI/Ger-ncia/assets/145677273/55b7a171-82dc-479b-afae-bf7891bf2551)
