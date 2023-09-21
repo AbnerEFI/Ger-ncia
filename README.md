@@ -18,4 +18,68 @@
 ### linha 3: CNPJ da empresa e cidade separados por um espaço. O espaço é fixo, sempre separando essas informações
 ### linha 6: Código do funcionário e nome, separados por espaço, assim como demais informações do cabeçalho da linha anterior.
 
-### assim como os exemplos dados acima, nas demais linhas também utilizou-se de caracteres estruturais do documento como referencial para obtenção de informações.
+### assim como nos exemplos dados acima, nas demais linhas também utilizou-se de caracteres estruturais do documento como referencial para obtenção de informações. Vamos prosseguir agora com o código.
+
+## 2 - Importando bibliotecas:
+### Neste projeto utilizei pandas, numpy, pdfplumber e os, para criar Dataframe, manipular listas, manipular o PDF mudar diretórios, respectivamente.
+```
+import pdfplumber
+import pandas as pd
+import numpy as np
+import os
+```
+## 3 - Criar lista de eventos:
+### Para cada item no recibo, existe um 'id', os quais foram listados a fim de comparar o 'id" encontrado no recibo com a lista e assim saber qual evento gerou crédito ou débito ao funcionário. Além disso uma lista vazia foi criada para receber os dados de cada funcionário de modo que, cada linha representa o recibo por mês, por funcionário.
+```
+#LISTA DE EVENTOS
+colunas=['00001', '00009', '00013', '00018', '00039', '00204', '01005', '00210', '00080', '00081', '00253', '00252', '00037', '00077', '00121', '00122', '00123', '00125', '00128', '00129', '00423']
+
+folha= []
+```
+## 4 - Mudando o 'path' 
+### Nessa etapa mudamos o path do python para a pasta onde se encontram os PDF's com os recibos. É importante que nesta pasta só existam PDF's de recibos, todos do mesmo modelo, para que não receber erros. Atribuímos o título de cada PDF a elementos de uma lista, é usada na próxima etapa para acessar os PDF's.
+```
+#MUDANÇA NO PATH PARA ABERTURA DOS ARQUIVOS.
+path=('COLOQUE AQUI O DIRETÓRIO DOS SEUS DADOS')
+os.chdir(path)
+lista=os.listdir(path)
+```
+## 5 - Acessando os PDF's
+### No meu caso eu tinha muitos arquivos para abrir, e cada arquivo possui muitas págnas, então usei um loop 'for' para percorrer todos os arquivos e todas as páginas. Além de abrir um PDF da lista esse código atribui cada página a um elemento da lista 'page', que é usada na próxima etapa.
+```
+# ABERTURA DE PDF'S PARA LEITURA DE DADOS 
+for j in range(1, len(lista)):
+     print(lista[j])
+     pdf=pdfplumber.open(lista[j])
+     page=pdf.pages
+     print('PDF=', j)
+```
+## 6 - Acessando cada Recibo
+### Cada página do PDF corresponde ao recibo de uma pessoa e possui duas guias do recibo. Aqui a página é acessada e o texto é extraído para a variável 'text'. O texto extraído com 'pdfplumber' possui o separador de linhas'\n', contamos a quantidade desses separadores e adicionamos 1, e dessa forma temos o total de linhas da página. O objetivo com isso é obter o número de linhas de somente um recibo. Ainda nesta etapa, uma lista é criada, essa lista é destinada a receber as informações retiradas do recibo, onde cada coluna é destinada a um tipo de informação que está contida no recibo e caso a informação não exista, a lista ja é pré iniciada com valor zero em suas entras.
+```
+#LOOP DE LETURA DE CADA PAGINA DA FOLHA DE PAGAMENTO
+     for i in range(len(page)):
+          text=page[i].extract_text()
+          lines=int((text.count('\n')+1)/2)
+          linha=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          print('PAGINA=', i)
+```
+## 7  - Obtendo dados
+### Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do racibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada
+```
+#VARIÁVEIS PARA SALVAR
+        
+          mes_ref= text.split('\n')[1].split(':')[1].split('/')[0]
+          linha[0]=mes_ref
+          ano_ref=text.split('\n')[1].split(':')[1].split('/')[1]
+          linha[1]=ano_ref
+          funcionario= text.split('\n')[4].split(' ')[1]+ ' ' + text.split('\n')[4].split(' ')[2]+ ' ' + text.split('\n')[4].split(' ')[3]
+          linha[2]=funcionario
+          funcao= text.split('\n')[5].split(' ')[0]
+          linha[3]=funcao
+
+          gratificacao=None
+          adiantamento=None
+          sal_norm_dinheiro=None
+          dif= None
+```
