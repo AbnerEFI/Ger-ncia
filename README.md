@@ -82,6 +82,7 @@ Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicio
           adiantamento=None
           sal_norm_dinheiro=None
           dif= None
+             ...
 ```
 ### 7.1 
 Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
@@ -113,5 +114,6 @@ if colunas[1] in info:
                     extra_50_val=0
                     linha[6]=hora_extra_50
                     linha[7]=extra_50_val
+                           ...
 ```
-Nesta fase dexei somente o código de obtenção de algumas informações. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o 'id' do recibo com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo, isto é, zero.
+Como você perceberá resumi o código aqui. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o  'id'  do recibo (da linha em que estamos) com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo (pois iniciamos as variáveis como zero na etapa anterior), isto é, zero.
