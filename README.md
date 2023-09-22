@@ -64,8 +64,8 @@ for j in range(1, len(lista)):
           linha=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           print('PAGINA=', i)
 ```
-## 7  - Obtendo dados
-### Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do racibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada
+## 7  - Obtendo dados do cabeçalho
+### Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicionamos as informasções nas colunas da lista 'linha'
 ```
 #VARIÁVEIS PARA SALVAR
         
@@ -83,3 +83,35 @@ for j in range(1, len(lista)):
           sal_norm_dinheiro=None
           dif= None
 ```
+## 7.1 
+### Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
+```
+for k in range(7, lines-5):
+               print('k=',k)
+               info=text.split('\n')[k]
+               if colunas[0]in info:
+                    sal_norm_dinheiro=info.split(colunas[0])[1].split(' ')[4]
+                    print(info.split(colunas[0])[1].split(' ')[3])
+                    sal_norm_dias=info.split(colunas[0])[1].split(' ')[3].split('/')[1]
+                    linha[4]=sal_norm_dias
+                    linha[5]=sal_norm_dinheiro
+                    continue
+               elif sal_norm_dias==None:
+                    sal_norm_dinheiro=0
+                    sal_norm_dias=0
+                    linha[4]=sal_norm_dias
+                    linha[5]=sal_norm_dinheiro
+
+if colunas[1] in info:
+                    hora_extra_50= info.split(colunas[1])[1].split(' ')[4]
+                    extra_50_val=info.split(colunas[1])[1].split(' ')[5]
+                    linha[6]=hora_extra_50
+                    linha[7]=extra_50_val
+                    continue
+               elif hora_extra_50 ==None:
+                    hora_extra_50= 0
+                    extra_50_val=0
+                    linha[6]=hora_extra_50
+                    linha[7]=extra_50_val
+```
+### Nesta fase dexei somente o código de obtenção de algumas informações. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o 'id' do recibo com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo, isto é, zero.
