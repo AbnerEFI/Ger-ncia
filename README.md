@@ -3,25 +3,25 @@
 
 
 # *Considerações*:
-## - O código é baseado em um modelo de holerite específico, talvez o modelo que você usa seja diferente.
-## - O código não contempla todos os eventos possíveis em um holerite, mas, contém os principais eventos, como, férias, horas extras, reembolsos, descontos...
+- O código é baseado em um modelo de holerite específico, talvez o modelo que você usa seja diferente.
+- - O código não contempla todos os eventos possíveis em um holerite, mas, contém os principais eventos, como, férias, horas extras, reembolsos, descontos...
 
 # Passo a Passo
 ## 1- Encontrando a estrutura padrão do PDF
-### Em pequenas empresas, a contabilidade é terceirizada, com isso o holerite dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
-### Para trabalhar com estes arquivos é necessário perceber a estrutura padrão do PDF. Neste projeto trabalhei com a biblioteca pdfplumber e com o seguinte padrão:
+Em pequenas empresas, a contabilidade é terceirizada, com isso o holerite dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
+Para trabalhar com estes arquivos é necessário perceber a estrutura padrão do PDF. Neste projeto trabalhei com a biblioteca pdfplumber e com o seguinte padrão:
 ![HOLERITE MODELO](https://github.com/AbnerEFI/Ger-ncia/assets/145677273/8afbc3d0-cd1f-4c4d-85e3-948b4afbba74)
 
-### A imagem acima, não deiza claro mas esses dados se repetem na página, isto é, cada página do PDF possui 2 vias deste documento na imagem. Isso é muito importante, pois, a biblioteca pdfplumber lê as strings de um pdf, separando as linhas e páginas de forma que o trabalho foi de manipulação de textos, acessando páginas, linhas e dividindo strings e acessando substrings baseando-se na estrutura do arquivo. Resumindo a estrutura temos:
-### linha 1: Nome da empresa - Caractere que sempre se repete, caso exista mais de uma empresa, podemos usar como referência "Recibo de Pagamento de Salário" e tudo que vem antes é portanto o nome da empresa.
-### linha 2: Note que "Mês:" é uma string fixa. Tudo que vem antes é o endereço, e tudo que vem depois é o mês de referência.
-### linha 3: CNPJ da empresa e cidade separados por um espaço. O espaço é fixo, sempre separando essas informações
-### linha 6: Código do funcionário e nome, separados por espaço, assim como demais informações do cabeçalho da linha anterior.
+A imagem acima, não deiza claro mas esses dados se repetem na página, isto é, cada página do PDF possui 2 vias deste documento na imagem. Isso é muito importante, pois, a biblioteca pdfplumber lê as strings de um pdf, separando as linhas e páginas de forma que o trabalho foi de manipulação de textos, acessando páginas, linhas e dividindo strings e acessando substrings baseando-se na estrutura do arquivo. Resumindo a estrutura temos:
+linha 1: Nome da empresa - Caractere que sempre se repete, caso exista mais de uma empresa, podemos usar como referência "Recibo de Pagamento de Salário" e tudo que vem antes é portanto o nome da empresa.
+linha 2: Note que "Mês:" é uma string fixa. Tudo que vem antes é o endereço, e tudo que vem depois é o mês de referência.
+linha 3: CNPJ da empresa e cidade separados por um espaço. O espaço é fixo, sempre separando essas informações
+linha 6: Código do funcionário e nome, separados por espaço, assim como demais informações do cabeçalho da linha anterior.
 
-### assim como nos exemplos dados acima, nas demais linhas também utilizou-se de caracteres estruturais do documento como referencial para obtenção de informações. Vamos prosseguir agora com o código.
+assim como nos exemplos dados acima, nas demais linhas também utilizou-se de caracteres estruturais do documento como referencial para obtenção de informações. Vamos prosseguir agora com o código.
 
 ## 2 - Importando bibliotecas:
-### Neste projeto utilizei pandas, numpy, pdfplumber e os, para criar Dataframe, manipular listas, manipular o PDF mudar diretórios, respectivamente.
+Neste projeto utilizei pandas, numpy, pdfplumber e os, para criar Dataframe, manipular listas, manipular o PDF mudar diretórios, respectivamente.
 ```
 import pdfplumber
 import pandas as pd
@@ -29,7 +29,7 @@ import numpy as np
 import os
 ```
 ## 3 - Criar lista de eventos:
-### Para cada item no recibo, existe um 'id', os quais foram listados a fim de comparar o 'id" encontrado no recibo com a lista e assim saber qual evento gerou crédito ou débito ao funcionário. Além disso uma lista vazia foi criada para receber os dados de cada funcionário de modo que, cada linha representa o recibo por mês, por funcionário.
+Para cada item no recibo, existe um 'id', os quais foram listados a fim de comparar o 'id" encontrado no recibo com a lista e assim saber qual evento gerou crédito ou débito ao funcionário. Além disso uma lista vazia foi criada para receber os dados de cada funcionário de modo que, cada linha representa o recibo por mês, por funcionário.
 ```
 #LISTA DE EVENTOS
 colunas=['00001', '00009', '00013', '00018', '00039', '00204', '01005', '00210', '00080', '00081', '00253', '00252', '00037', '00077', '00121', '00122', '00123', '00125', '00128', '00129', '00423']
@@ -37,7 +37,7 @@ colunas=['00001', '00009', '00013', '00018', '00039', '00204', '01005', '00210',
 folha= []
 ```
 ## 4 - Mudando o 'path' 
-### Nessa etapa mudamos o path do python para a pasta onde se encontram os PDF's com os recibos. É importante que nesta pasta só existam PDF's de recibos, todos do mesmo modelo, para que não receber erros. Atribuímos o título de cada PDF a elementos de uma lista, é usada na próxima etapa para acessar os PDF's.
+Nessa etapa mudamos o path do python para a pasta onde se encontram os PDF's com os recibos. É importante que nesta pasta só existam PDF's de recibos, todos do mesmo modelo, para que não receber erros. Atribuímos o título de cada PDF a elementos de uma lista, é usada na próxima etapa para acessar os PDF's.
 ```
 #MUDANÇA NO PATH PARA ABERTURA DOS ARQUIVOS.
 path=('COLOQUE AQUI O DIRETÓRIO DOS SEUS DADOS')
@@ -45,7 +45,7 @@ os.chdir(path)
 lista=os.listdir(path)
 ```
 ## 5 - Acessando os PDF's
-### No meu caso eu tinha muitos arquivos para abrir, e cada arquivo possui muitas págnas, então usei um loop 'for' para percorrer todos os arquivos e todas as páginas. Além de abrir um PDF da lista esse código atribui cada página a um elemento da lista 'page', que é usada na próxima etapa.
+No meu caso eu tinha muitos arquivos para abrir, e cada arquivo possui muitas págnas, então usei um loop 'for' para percorrer todos os arquivos e todas as páginas. Além de abrir um PDF da lista esse código atribui cada página a um elemento da lista 'page', que é usada na próxima etapa.
 ```
 # ABERTURA DE PDF'S PARA LEITURA DE DADOS 
 for j in range(1, len(lista)):
@@ -55,7 +55,7 @@ for j in range(1, len(lista)):
      print('PDF=', j)
 ```
 ## 6 - Acessando cada Recibo
-### Cada página do PDF corresponde ao recibo de uma pessoa e possui duas guias do recibo. Aqui a página é acessada e o texto é extraído para a variável 'text'. O texto extraído com 'pdfplumber' possui o separador de linhas'\n', contamos a quantidade desses separadores e adicionamos 1, e dessa forma temos o total de linhas da página. O objetivo com isso é obter o número de linhas de somente um recibo. Ainda nesta etapa, uma lista é criada, essa lista é destinada a receber as informações retiradas do recibo, onde cada coluna é destinada a um tipo de informação que está contida no recibo e caso a informação não exista, a lista ja é pré iniciada com valor zero em suas entras.
+Cada página do PDF corresponde ao recibo de uma pessoa e possui duas guias do recibo. Aqui a página é acessada e o texto é extraído para a variável 'text'. O texto extraído com 'pdfplumber' possui o separador de linhas'\n', contamos a quantidade desses separadores e adicionamos 1, e dessa forma temos o total de linhas da página. O objetivo com isso é obter o número de linhas de somente um recibo. Ainda nesta etapa, uma lista é criada, essa lista é destinada a receber as informações retiradas do recibo, onde cada coluna é destinada a um tipo de informação que está contida no recibo e caso a informação não exista, a lista ja é pré iniciada com valor zero em suas entras.
 ```
 #LOOP DE LETURA DE CADA PAGINA DA FOLHA DE PAGAMENTO
      for i in range(len(page)):
@@ -65,7 +65,7 @@ for j in range(1, len(lista)):
           print('PAGINA=', i)
 ```
 ## 7  - Obtendo dados do cabeçalho
-### Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicionamos as informasções nas colunas da lista 'linha'
+Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicionamos as informasções nas colunas da lista 'linha'
 ```
 #VARIÁVEIS PARA SALVAR
         
@@ -83,8 +83,8 @@ for j in range(1, len(lista)):
           sal_norm_dinheiro=None
           dif= None
 ```
-## 7.1 
-### Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
+### 7.1 
+Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
 ```
 for k in range(7, lines-5):
                print('k=',k)
@@ -114,4 +114,4 @@ if colunas[1] in info:
                     linha[6]=hora_extra_50
                     linha[7]=extra_50_val
 ```
-### Nesta fase dexei somente o código de obtenção de algumas informações. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o 'id' do recibo com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo, isto é, zero.
+Nesta fase dexei somente o código de obtenção de algumas informações. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o 'id' do recibo com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo, isto é, zero.
