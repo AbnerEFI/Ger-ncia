@@ -64,8 +64,10 @@ Cada página do PDF corresponde ao recibo de uma pessoa e possui duas guias do r
           linha=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           print('PAGINA=', i)
 ```
-## 7  - Obtendo dados do cabeçalho
-Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicionamos as informasções nas colunas da lista 'linha'
+## 7  - Obtendo dados 
+### 7.1 - Dados do cabeçalho
+Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicionamos as informasções nas colunas da lista 'linha'.  Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
+A informação é obtida cortando a string 'text' que contém o texto do recibo, pelos caracteres estruturais, utilizando para isso a função 'split()' uma vez que a string é cortada selecionamos a substring que nos interessa. Por exemplo: text.split('\n')[0]. Vai separar o texto da variavel 'text', por "\n" (nova linha), dessa forma a string fica separada por linhas. O argumento[0], é a seleção da substring que está na posição '0', ou seja, a primeira linha.
 ```
 #VARIÁVEIS PARA SALVAR
         
@@ -84,8 +86,9 @@ Nesta etapa obtemos informações de mês, ano, funcionário, função, e adicio
           dif= None
              ...
 ```
-### 7.1 
-Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, ess informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Primeiro a informação do cabeçalho é retirada, e depois disso declaramos algumas variáveis que receberão informações como 'NONE'.
+### 7.2 - Informações dos eventos
+Nesta etapa acesamos as informações e atualizamos a lista 'linha' percorrendo todas as linhas entre o cabeçalho e o rodapé do recibo, essa informação é possível de se obter pois sabemos o número exato de linhas do recibo, do cabeçalho e do rodapé. Aqui 'info' é a string separada por linhas. de modo que info[a] acessa a linha 'a' da string. Dentro de cada linha manipulamos as strings para separá-las por caracteres estruturais.
+
 ```
 for k in range(7, lines-5):
                print('k=',k)
@@ -109,7 +112,7 @@ if colunas[1] in info:
                     linha[6]=hora_extra_50
                     linha[7]=extra_50_val
                     continue
-               elif hora_extra_50 ==None:
+               elif hora_extra_50 == None:
                     hora_extra_50= 0
                     extra_50_val=0
                     linha[6]=hora_extra_50
@@ -117,3 +120,25 @@ if colunas[1] in info:
                            ...
 ```
 Como você perceberá resumi o código aqui. O que acontece aqui é que, em cada linha entre cabeçalho e rodapé, testamos todos os 'id' de eventos. Isso acontece porque nem sempre todos os eventos estão presentes, e podem aparecer em linhas diferentes. Por isso, em cada linha testa-se todos os 'id' quando ocorre um math entre o  'id'  do recibo (da linha em que estamos) com o 'id' listado as variáveis são atualizadas e inseridas na lista 'linha', enquanto isso não acontece, o valor é mantido o mesmo (pois iniciamos as variáveis como zero na etapa anterior), isto é, zero.
+
+### 7.3 - Informações do rodapé
+Esta etapa é muito parecida com a 7.1 a diferença é que a referência está no fim da string, isto é, procuramos a informação do fim para o início.
+```
+total_vencimentos=text.split('\n')[lines-4].split(' ')[0]
+          linha[22]=total_vencimentos
+          total_descontos=text.split('\n')[lines-4].split(' ')[1]
+          linha[23]=total_descontos
+          total_liquido=text.split('\n')[-3].split(' ')[2]
+          linha[24]=total_liquido
+          salario_base=text.split('\n')[lines-1].split(' ')[0]
+          linha[25]=salario_base
+```
+## 8 - Exportando dados para uma planilha
+Ao fim dos loops, todas as linhas de todas as páginas de todos os PDF's foram percorridas, e a lista 'linha' possui todas as informações. Agora um Dataframe é feito com um cabeçalho baseado nas informações que foram extraídas. O Dataframe é então exportado para uma planilha, no diretório que desejamos.
+```
+dataframe=pd.DataFrame(folha, columns=['Mês de Referência','Ano Referênca', 'Colaborador', 'Função', 'Dias Trabalho Normal', 'Salario Normal', 'Hora Extra 50%', 'Extra 50%', 'Hora Extra 100%', 'Extra 100%', 'Extra DSR (Integração)', 'Extra DSR', '% Insalubridade', 'Val. Insalubridade', 'Gratificação', 'DIF SALARIAL','Ajuda de Custo', 'INSS', '%IRRF', 'Val. IRRF', 'Adiantamento', 'Seguro de Vida', 'Total Vencimentos', 'Total Descontos', 'Total Líquido', 'Salário Base', 'Sal. Contr INSS', 'Base FGTS', 'FGTS', 'Base IRRF', 'Faixa IRRF', 'Add. Noturno Horas', 'Add Noturno Valor', 'Faltas Horas', 'Faltas Valor', 'Ferias Normais', 'INT.HE.FERIAS', 'INT. ADIC. INSAL. FERIAS', 'INT. ADIC. NOTURNO FERIAS', 'ADICIONAL 1/3 S/FERIAS', 'LIQUIDO FERIAS NORMAIS', 'Reembolso'])
+print(dataframe)
+#SALVA DATAFRAME COMO PLANILHA NA PASTA #
+os.chdir('Diretório para salvar')
+dataframe.to_excel('FOLHA.xlsx')
+```
