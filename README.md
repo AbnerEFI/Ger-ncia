@@ -3,12 +3,12 @@
 
 
 # *Considerações:*
-- O código é baseado em um modelo de holerite específico, talvez o modelo que você usa seja diferente.
-- O código não contempla todos os eventos possíveis em um holerite, mas, contém os principais eventos, como, férias, horas extras, reembolsos, descontos...
+- O código é baseado em um modelo de recibo específico, talvez o modelo que você usa seja diferente.
+- O código não contempla todos os eventos possíveis em um recibo, mas, contém os principais eventos, como, férias, horas extras, reembolsos, descontos...
 
 # Passo a Passo
 ## 1- Encontrando a estrutura padrão do PDF
-Em pequenas empresas, a contabilidade é terceirizada, com isso o holerite dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
+Em pequenas empresas, a contabilidade é terceirizada, com isso o recibo dos funcionários é fornecido pelo escritório de contabilidade em um arquivo PDF.
 Para trabalhar com estes arquivos é necessário perceber a estrutura padrão do PDF. Neste projeto trabalhei com a biblioteca pdfplumber e com o seguinte padrão:
 ![HOLERITE MODELO](https://github.com/AbnerEFI/Ger-ncia/assets/145677273/8afbc3d0-cd1f-4c4d-85e3-948b4afbba74)
 
