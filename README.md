@@ -1,4 +1,4 @@
-# **Gerêcia**
+# **Recibo de Salário (holerite)**
  Este código extrai informações de um PDF que contém os holerites dos funcionários de uma micro empresa. As informações extraidas são salvas em uma planilha.
 
 
